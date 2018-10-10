@@ -1,0 +1,38 @@
+version: '2.1'
+
+services:
+    grafana:
+        user: root
+        image: 'grafana/grafana:5.2.4'
+        container_name: website-monitor-grafana
+        volumes:
+            #- ./config/grafana/grafana.ini:/etc/grafana/grafana.ini
+            - ./data/grafana:/var/lib/grafana
+        ports:
+            - "23000:3000"
+        networks:
+            - monitornet
+    
+    prometheus:
+        user: root
+        image: 'prom/prometheus:v2.4.3'
+        container_name: website-monitor-prometheus
+        volumes:
+            - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+            - ./data/prometheus:/prometheus-data
+        ports:
+            - "29090:9090"
+        networks:
+            - monitornet
+
+    pushgateway:
+        user: root
+        image: 'prom/pushgateway:v0.5.2'
+        container_name: website-monitor-pushgateway
+        ports:
+            - "29091:9091"
+        networks:
+            - monitornet
+networks:
+    monitornet:
+        driver: bridge

@@ -5,9 +5,16 @@ services:
         user: root
         image: 'grafana/grafana:5.2.4'
         container_name: website-monitor-grafana
+        #environment:
+        #    - GF_SECURITY_ADMIN_USER=owen
+        #    - GF_SECURITY_ADMIN_PASSWORD=owen
+        #    #- GF_SERVER_HTTP_PORT=4000
         volumes:
-            #- ./config/grafana/grafana.ini:/etc/grafana/grafana.ini
+            - ./config/grafana/grafana.ini:/etc/grafana/grafana.ini
+            - ./config/grafana/provisioning/datasources/website-monitor.yaml:/etc/grafana/provisioning/datasources/website-monitor.yaml
+            - ./config/grafana/provisioning/dashboards/website-monitor.yaml:/etc/grafana/provisioning/dashboards/website-monitor.yaml
             - ./data/grafana:/var/lib/grafana
+            - ./config/grafana/dashboards/website-monitor.json:/var/lib/grafana/dashboards/website-monitor.json
         ports:
             - "23000:3000"
         networks:
